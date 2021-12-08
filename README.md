@@ -1,5 +1,5 @@
 # tubegrabber
-small personal script for automating youtube downloads via youtube-dlp.
+Small personal script for automating youtube downloads via youtube-dlp.
 
 Will add the ability to delete videos via the YouTube API after they're downloaded from a playlist in the future.
 
