@@ -61,10 +61,6 @@ def main():
             'format': 'bestaudio',
             'cookiesfrombrowser': ('chrome', 'Profile 1'),
             'download_archive': data["archive_file"],
-            # casting to Path object to get proper seperator, then recast to
-            # str for JSON storage
-            'outtmpl': seperator_sanitize(data["dl_folder"]) + f'{os.sep}' +
-            strftime("%b-%d-%Y") + f'{os.sep}' + '%(title)s.%(ext)s',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
@@ -81,6 +77,11 @@ def main():
         except Exception as e:
             print(f"JSON file didnt get dumped for some reason. \
                 This is the err msg: {e}")
+
+    # casting to Path object to get proper seperator, then recast to str
+    # for JSON storage
+    data['ydl_opts']['outtmpl'] = seperator_sanitize(data['dl_folder']) + f'{os.sep}'
+    + strftime("%b-%d-%Y") + f'{os.sep}' + '%(title)s.%(ext)s'
 
     with YoutubeDL(data['ydl_opts']) as ydl:
         ydl.download([data['url_to_download']])
