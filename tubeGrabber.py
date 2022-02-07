@@ -19,10 +19,6 @@ from yt_dlp import YoutubeDL
 def main():
     """ main program """
 
-    root = tk.Tk()
-    root.title("Greetings Human")
-    root.withdraw()
-
     def seperator_sanitize(file_str: str) -> str:
         '''
         takes a file path as a string and returns the correct flavor
@@ -35,13 +31,19 @@ def main():
         except TypeError:
             print("wrong type of object passed")
 
+    root = tk.Tk()
+    root.title("Greetings Human")
+    root.withdraw()
+
     data = {}  # dict to load vars like 'dl_folder' etc from json state file
-    data_file = 'ydl_data.json'
+    current_folder = Path(__file__).parent
+    data_file = current_folder / 'ydl_data.json'
 
     try:
         with open(data_file, 'r') as f:
             data = json.load(f)  # dump process vars into program
     except FileNotFoundError:
+        print(data)
         print("First time running the script it seems. Let's set up shop then.")
         chosen_dir = fd.askdirectory(title="Select Default Download Destination")
         data['dl_folder'] = seperator_sanitize(chosen_dir)
@@ -80,7 +82,7 @@ def main():
 
     # casting to Path object to get proper seperator, then recast to str
     # for JSON storage
-    data['ydl_opts']['outtmpl'] = seperator_sanitize(data['dl_folder']) + f'{os.sep}'
+    data['ydl_opts']['outtmpl'] = seperator_sanitize(data['dl_folder']) + f'{os.sep}' \
     + strftime("%b-%d-%Y") + f'{os.sep}' + '%(title)s.%(ext)s'
 
     with YoutubeDL(data['ydl_opts']) as ydl:
